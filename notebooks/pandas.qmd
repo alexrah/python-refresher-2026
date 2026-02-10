@@ -1,0 +1,65 @@
+# Pandas
+
+## Creating DataFrames
+
+```{python}
+import json
+import pandas as pd
+
+# from dict
+data = {
+    'name': ['Alice', 'Bob', 'Charlie', 'David'],
+    'age': [25, 30, 35, 40],
+    'city': ['NYC', 'SF', 'LA', 'NYC'],
+    'salary': [70000, 80000, 90000, 95000]
+}
+
+df_from_dict = pd.DataFrame(data)
+print(df_from_dict)
+
+# From list of dictionaries
+records = [
+    {'name': 'Alice', 'age': 25},
+    {'name': 'Bob', 'age': 30}
+]
+
+df_from_list = pd.DataFrame(records)
+print(df_from_list)
+
+# from JSON
+json_data = '[{"name": "Alice", "age": 25}, {"name": "Bob", "age": 30}]'
+json_parsed = json.loads(json_data)
+df_from_json = pd.DataFrame(json_parsed)
+print(df_from_json)
+```
+
+## Basic operations
+
+```{python}
+import pandas as pd
+from pandas import DataFrame
+import numpy as np
+
+np.random.seed(42)
+
+data = {
+    'name': [f'Person_{i}' for i in range(1, 51)],
+    'age': np.random.randint(18, 65, 50),
+    'city': np.random.choice(['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose'], 50),
+    'salary': np.random.randint(30000, 120000, 50)
+}
+
+print(data)
+
+df: DataFrame = pd.DataFrame(data)
+
+print(df.head())
+print(df.tail())
+print(df.info())
+print(df.describe())
+print(df['age'].mean())
+print(df['age'].median())
+print(df['age'].std())
+
+
+```
