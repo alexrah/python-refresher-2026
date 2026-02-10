@@ -1,0 +1,22 @@
+[project]
+name = "refresher2026"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "ipykernel>=7.2.0",
+    "nbclient>=0.10.4",
+    "nbformat>=5.10.4",
+    "numpy>=2.4.2",
+    "pandas>=3.0.0",
+    "pydantic>=2.12.5",
+]
+
+[dependency-groups]
+dev = [
+    "poethepoet>=0.41.0",
+]
+[tool.poe.tasks]
+pydantic = "python src/test_pydantic.py"
+init_jupyter = "uv add ipykernel && python -m ipykernel install --user --name refresher2026"

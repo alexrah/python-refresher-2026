@@ -1,0 +1,98 @@
+# basics
+
+```{python}
+
+# string formatting
+name = "John"
+age = 30
+
+def greet(name: str, age: int):
+  return f"Hello {name}, you are {age} years old"
+
+print(greet(name, age))
+
+# native types
+collection: dict[str, str | int] = {'foo': 1, 'bar': 'baz'}
+print(collection)
+
+opt_data: str | None = None
+
+```
+
+# List comprehensions
+```{python}
+
+square = [x**2 for x in range(10)]
+
+print(square)
+
+square_even = [x**2 for x in range(10) if x % 2 == 0]
+
+print(square_even)
+
+```
+
+
+# Pydantic
+
+## The basics
+
+```{python}
+from pydantic import BaseModel, field_validator, ConfigDict, Field
+from typing import ClassVar
+
+class User(BaseModel):
+  name: str
+  title: str | None = Field(default=None)
+  surname: str
+  email: str
+  age: int = Field(ge = 18, le = 99)
+
+  @field_validator('email')
+  def email_validator(cls, v:str):
+    if "@" not in v:
+      raise ValueError("Invalid Email")
+    return v.lower()
+
+  model_config: ClassVar[ConfigDict] = ConfigDict(
+    validate_assignment = True,
+    frozen=False
+  )
+
+user = User(
+  name = "Mario",
+  surname = "Rossi",
+  email = "mario.rossi@example.com",
+  age = 80
+)
+
+
+user.email = 'MARIO@ROSSI.IT'
+
+print(user)
+```
+
+## Parsing and serializing
+
+```{python}
+from pydantic import BaseModel
+from typing import TypedDict 
+
+class Item(BaseModel):
+  name: str
+  value: int
+
+# validate a dict against a pydantic model, then return the original dict
+itemDict = {
+  'name': 'foo',
+  'value': 1
+}
+item_from_dict = Item(**itemDict).model_dump()
+print(item_from_dict)
+
+# validate a json string against a pydantic model
+response = '{"name": "foo", "value": 1}'
+item_from_json = Item.model_validate_json(response)
+print(item_from_json)
+```
+
