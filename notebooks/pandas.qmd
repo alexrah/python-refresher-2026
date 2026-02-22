@@ -46,7 +46,7 @@ import pandas as pd
 from pandas import DataFrame
 import numpy as np
 
-is_printable = False
+is_printable = True
 
 np.random.seed(42)
 
@@ -72,20 +72,25 @@ if is_printable:
     print(basic_df['age'].mean())
     print("\nMedian age:")
     print(basic_df['age'].median())
-    print("\nManual median calculation:")
-
-row_count = len(basic_df)
-if( row_count % 2 == 0):
-    median = (basic_df.sort_values('age').iloc[row_count // 2] + basic_df.sort_values('age').iloc[row_count // 2 - 1]) / 2
-else:
-    median = basic_df.sort_values('age').iloc[row_count // 2]
-print(median)
-
-if is_printable:
-    print(basic_df.sort_values('age').iloc[24])
     print("\nStandard deviation of age:")
     print(basic_df['age'].std())
 
+print("\nManual median calculation:")
+row_count = len(basic_df)
+ageSorted = basic_df['age'].sort_values()
+
+if( row_count % 2 == 0):
+    median = (ageSorted.iloc[row_count // 2] + ageSorted.iloc[row_count // 2 - 1]) / 2
+else:
+    median = ageSorted.iloc[row_count // 2]
+print(median)
+
+
+print("\n filtering: age > 40 ")
+print(basic_df[basic_df['age'] > 40].sort_values('age'))
+
+print("\n filtering: age > 40 and city == 'New York'")
+print(basic_df[(basic_df['age'] > 40) & (basic_df['city'] == 'New York')].sort_values('age'))
 
 ```
 
