@@ -6,16 +6,22 @@
 import json
 import pandas as pd
 
+class Person:
+    NAME = 'name'
+    AGE = 'age'
+    CITY = 'city'
+    SALARY = 'salary'
+
 # from dict
 data = {
-    'name': ['Alice', 'Bob', 'Charlie', 'David'],
-    'age': [25, 30, 35, 40],
-    'city': ['NYC', 'SF', 'LA', 'NYC'],
-    'salary': [70000, 80000, 90000, 95000]
+    Person.NAME : ['Alice', 'Bob', 'Charlie', 'David'],
+    Person.AGE : [25, 30, 35, 40],
+    Person.CITY : ['NYC', 'SF', 'LA', 'NYC'],
+    Person.SALARY : [70000, 80000, 90000, 95000]
 }
 
 df_from_dict = pd.DataFrame(data)
-print(df_from_dict)
+print(df_from_dict[Person.NAME])
 
 # From list of dictionaries
 records = [
@@ -40,6 +46,8 @@ import pandas as pd
 from pandas import DataFrame
 import numpy as np
 
+is_printable = False
+
 np.random.seed(42)
 
 data = {
@@ -49,17 +57,56 @@ data = {
     'salary': np.random.randint(30000, 120000, 50)
 }
 
-print(data)
+basic_df: DataFrame = pd.DataFrame(data)
 
-df: DataFrame = pd.DataFrame(data)
+if is_printable:
+    print("First 5 rows:")
+    print(basic_df.head())
+    print("\nLast 5 rows:")
+    print(basic_df.tail())
+    print("\nDataFrame info:")
+    print(basic_df.info())
+    print("\nDescriptive statistics:")
+    print(basic_df.describe())
+    print("\nMean age:")
+    print(basic_df['age'].mean())
+    print("\nMedian age:")
+    print(basic_df['age'].median())
+    print("\nManual median calculation:")
 
-print(df.head())
-print(df.tail())
-print(df.info())
-print(df.describe())
-print(df['age'].mean())
-print(df['age'].median())
-print(df['age'].std())
+row_count = len(basic_df)
+if( row_count % 2 == 0):
+    median = (basic_df.sort_values('age').iloc[row_count // 2] + basic_df.sort_values('age').iloc[row_count // 2 - 1]) / 2
+else:
+    median = basic_df.sort_values('age').iloc[row_count // 2]
+print(median)
+
+if is_printable:
+    print(basic_df.sort_values('age').iloc[24])
+    print("\nStandard deviation of age:")
+    print(basic_df['age'].std())
 
 
 ```
+
+## Pandera - Pandas Type-checking
+```{python}
+import pandas as pd
+import pandera.pandas as pa
+from pandera.typing import Series, DataFrame
+
+class UserSchema(pa.DataFrameModel):
+    name: Series[str] = pa.Field()
+    age: Series[int] = pa.Field()
+    city: Series[str] = pa.Field()
+
+df: DataFrame[UserSchema] = UserSchema.validate(pd.DataFrame({
+    'name': ['Alice', 'Bob', 'Charlie'],
+    'age' : [25, 30, 40],
+    'city': ['NYC', 'SF', 'LA']
+}))
+
+```
+
+
+

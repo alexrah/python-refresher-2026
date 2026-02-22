@@ -1,0 +1,158 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# Pandas\n",
+        "\n",
+        "## Creating DataFrames"
+      ],
+      "id": "fdfebe63"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import json\n",
+        "import pandas as pd\n",
+        "\n",
+        "class Person:\n",
+        "    NAME = 'name'\n",
+        "    AGE = 'age'\n",
+        "    CITY = 'city'\n",
+        "    SALARY = 'salary'\n",
+        "\n",
+        "# from dict\n",
+        "data = {\n",
+        "    Person.NAME : ['Alice', 'Bob', 'Charlie', 'David'],\n",
+        "    Person.AGE : [25, 30, 35, 40],\n",
+        "    Person.CITY : ['NYC', 'SF', 'LA', 'NYC'],\n",
+        "    Person.SALARY : [70000, 80000, 90000, 95000]\n",
+        "}\n",
+        "\n",
+        "df_from_dict = pd.DataFrame(data)\n",
+        "print(df_from_dict[Person.NAME])\n",
+        "\n",
+        "# From list of dictionaries\n",
+        "records = [\n",
+        "    {'name': 'Alice', 'age': 25},\n",
+        "    {'name': 'Bob', 'age': 30}\n",
+        "]\n",
+        "\n",
+        "df_from_list = pd.DataFrame(records)\n",
+        "print(df_from_list)\n",
+        "\n",
+        "# from JSON\n",
+        "json_data = '[{\"name\": \"Alice\", \"age\": 25}, {\"name\": \"Bob\", \"age\": 30}]'\n",
+        "json_parsed = json.loads(json_data)\n",
+        "df_from_json = pd.DataFrame(json_parsed)\n",
+        "print(df_from_json)"
+      ],
+      "id": "62c5a01b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Basic operations"
+      ],
+      "id": "f602a2e2"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import pandas as pd\n",
+        "from pandas import DataFrame\n",
+        "import numpy as np\n",
+        "\n",
+        "is_printable = False\n",
+        "\n",
+        "np.random.seed(42)\n",
+        "\n",
+        "data = {\n",
+        "    'name': [f'Person_{i}' for i in range(1, 51)],\n",
+        "    'age': np.random.randint(18, 65, 50),\n",
+        "    'city': np.random.choice(['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose'], 50),\n",
+        "    'salary': np.random.randint(30000, 120000, 50)\n",
+        "}\n",
+        "\n",
+        "basic_df: DataFrame = pd.DataFrame(data)\n",
+        "\n",
+        "if is_printable:\n",
+        "    print(\"First 5 rows:\")\n",
+        "    print(basic_df.head())\n",
+        "    print(\"\\nLast 5 rows:\")\n",
+        "    print(basic_df.tail())\n",
+        "    print(\"\\nDataFrame info:\")\n",
+        "    print(basic_df.info())\n",
+        "    print(\"\\nDescriptive statistics:\")\n",
+        "    print(basic_df.describe())\n",
+        "    print(\"\\nMean age:\")\n",
+        "    print(basic_df['age'].mean())\n",
+        "    print(\"\\nMedian age:\")\n",
+        "    print(basic_df['age'].median())\n",
+        "    print(\"\\nManual median calculation:\")\n",
+        "\n",
+        "row_count = len(basic_df)\n",
+        "if( row_count % 2 == 0):\n",
+        "    median = (basic_df.sort_values('age').iloc[row_count // 2] + basic_df.sort_values('age').iloc[row_count // 2 - 1]) / 2\n",
+        "else:\n",
+        "    median = basic_df.sort_values('age').iloc[row_count // 2]\n",
+        "print(median)\n",
+        "\n",
+        "if is_printable:\n",
+        "    print(basic_df.sort_values('age').iloc[24])\n",
+        "    print(\"\\nStandard deviation of age:\")\n",
+        "    print(basic_df['age'].std())\n"
+      ],
+      "id": "bfe831ff",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Pandera - Pandas Type-checking"
+      ],
+      "id": "f888d345"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import pandas as pd\n",
+        "import pandera.pandas as pa\n",
+        "from pandera.typing import Series, DataFrame\n",
+        "\n",
+        "class UserSchema(pa.DataFrameModel):\n",
+        "    name: Series[str] = pa.Field()\n",
+        "    age: Series[int] = pa.Field()\n",
+        "    city: Series[str] = pa.Field()\n",
+        "\n",
+        "df: DataFrame[UserSchema] = UserSchema.validate(pd.DataFrame({\n",
+        "    'name': ['Alice', 'Bob', 'Charlie'],\n",
+        "    'age' : [25, 30, 40],\n",
+        "    'city': ['NYC', 'SF', 'LA']\n",
+        "}))"
+      ],
+      "id": "86e7b714",
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "/usr/local/share/jupyter/kernels/python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
