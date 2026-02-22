@@ -1,0 +1,20 @@
+# test a plot
+```{python}
+import plotly.express as px
+
+df = px.data.iris()
+fig = px.scatter(df, x="sepal_width", y="sepal_length", color="species")
+fig.show()
+
+```
+
+# test another plot
+```{python}
+import plotly.express as px
+
+df = px.data.tips()
+fig = px.box(df, y="total_bill")
+fig.show()
+
+```
+
