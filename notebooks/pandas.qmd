@@ -94,7 +94,7 @@ print(basic_df[(basic_df['age'] > 40) & (basic_df['city'] == 'New York')].sort_v
 
 ```
 
-## Pandera - Pandas Type-checking
+## Pandera - Basic Type-checking
 ```{python}
 import pandas as pd
 import pandera.pandas as pa
@@ -112,6 +112,75 @@ df: DataFrame[UserSchema] = UserSchema.validate(pd.DataFrame({
 }))
 
 ```
+
+## Pandera: advanced Type-checking
+
+```{python}
+import pandas as pd
+import pandera.pandas as pa
+from pandera.typing import Series, DataFrame
+from typing import Literal, get_args, List, Any
+import numpy as np
+
+np.random.seed(42)
+
+class Employee:
+    NAME = 'name'
+    ROLE = 'role'
+    SKILLSET = 'skillset'
+
+NameType = Literal['Alice', 'Bob', 'Charlie', 'David', 'Eve']
+RoleType = Literal['Sales Manager', 'IT Manager', 'HR Manager', 'Finance Manager', 'Marketing Manager']
+SkillsetType = Literal['Sales', 'IT', 'HR', 'Finance', 'Marketing']
+
+class EmployeeSchema(pa.DataFrameModel):
+    name: Series[str] = pa.Field(isin=get_args(NameType))
+    role: Series[str] = pa.Field(isin=get_args(RoleType))
+    skillset: Series[List[str]]
+    
+    @pa.check("skillset")
+    def check_skillset(cls, series: pd.Series) -> pd.Series:
+        """Validate that each list contains only valid skill strings"""
+        valid_skills = set(get_args(SkillsetType))
+        # Use apply with type hint for the lambda
+        return series.apply(lambda skill_list: all(str(skill) in valid_skills for skill in skill_list))
+
+
+# print(list(np.random.choice(get_args(NameType), 50)))
+
+employees_data = {
+    Employee.NAME: np.random.choice(get_args(NameType), 50),
+    Employee.ROLE: np.random.choice(get_args(RoleType), 50),
+    Employee.SKILLSET: [list(np.random.choice(get_args(SkillsetType), 2)) for _ in range(50)]
+}
+
+# print(employees_data)
+
+employees_df: DataFrame[EmployeeSchema] = EmployeeSchema.validate(pd.DataFrame(employees_data))
+
+print(employees_df.head(10))
+
+```
+
+
+## test
+```{python}
+from typing import Literal, get_args 
+import numpy as np
+
+NameTypeTest = Literal['Alice', 'Bob', 'Charlie', 'David', 'Eve']
+print(np.random.choice(get_args(NameTypeTest), 50))
+
+```
+
+
+
+
+
+
+
+
+
 
 
 

@@ -101,7 +101,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="creating-dataframes" class="level2">
 <h2 class="anchored" data-anchor-id="creating-dataframes">Creating DataFrames</h2>
-<div id="b40d3374" class="cell" data-execution_count="1">
+<div id="f720f5c8" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -153,7 +153,7 @@ Name: name, dtype: str
 </section>
 <section id="basic-operations" class="level2">
 <h2 class="anchored" data-anchor-id="basic-operations">Basic operations</h2>
-<div id="8b0bd79f" class="cell" data-execution_count="2">
+<div id="4fc11bd1" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pandas <span class="im">import</span> DataFrame</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -294,7 +294,7 @@ Manual median calculation:
 </section>
 <section id="pandera---pandas-type-checking" class="level2">
 <h2 class="anchored" data-anchor-id="pandera---pandas-type-checking">Pandera - Pandas Type-checking</h2>
-<div id="4f1339cf" class="cell" data-execution_count="3">
+<div id="66f37a46" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandera.pandas <span class="im">as</span> pa</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pandera.typing <span class="im">import</span> Series, DataFrame</span>
@@ -309,6 +309,61 @@ Manual median calculation:
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'age'</span> : [<span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">40</span>],</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'city'</span>: [<span class="st">'NYC'</span>, <span class="st">'SF'</span>, <span class="st">'LA'</span>]</span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>}))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="data-manipulation" class="level2">
+<h2 class="anchored" data-anchor-id="data-manipulation">Data Manipulation</h2>
+<div id="71d7e91b" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandera.pandas <span class="im">as</span> pa</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pandera.typing <span class="im">import</span> Series, DataFrame</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Literal, get_args, List</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Employee:</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    NAME <span class="op">=</span> <span class="st">'name'</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    ROLE <span class="op">=</span> <span class="st">'role'</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    SKILLSET <span class="op">=</span> <span class="st">'skillset'</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>NameType <span class="op">=</span> Literal[<span class="st">'Alice'</span>, <span class="st">'Bob'</span>, <span class="st">'Charlie'</span>, <span class="st">'David'</span>, <span class="st">'Eve'</span>]</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>RoleType <span class="op">=</span> Literal[<span class="st">'Sales Manager'</span>, <span class="st">'IT Manager'</span>, <span class="st">'HR Manager'</span>, <span class="st">'Finance Manager'</span>, <span class="st">'Marketing Manager'</span>]</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>SkillsetType <span class="op">=</span> Literal[<span class="st">'Sales'</span>, <span class="st">'IT'</span>, <span class="st">'HR'</span>, <span class="st">'Finance'</span>, <span class="st">'Marketing'</span>]</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> EmployeeSchema(pa.DataFrameModel):</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    name: Series[NameType] <span class="op">=</span> pa.Field()</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    role: Series[RoleType] <span class="op">=</span> pa.Field()</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    skillset: Series[SkillsetType] <span class="op">=</span> pa.Field()</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>employees_data <span class="op">=</span> {</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    Employee.NAME: np.random.choice(get_args(NameType), <span class="dv">50</span>),</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    Employee.ROLE: np.random.choice(get_args(RoleType), <span class="dv">50</span>),</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    Employee.SKILLSET: [<span class="bu">list</span>(np.random.choice(get_args(SkillsetType), <span class="dv">2</span>)) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">50</span>)]</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(employees_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'name': array(['David', 'Alice', 'Alice', 'Alice', 'Alice', 'Charlie', 'Alice',
+       'David', 'Eve', 'Alice', 'Charlie', 'Charlie', 'Alice', 'Eve',
+       'Alice', 'Charlie', 'Bob', 'David', 'Charlie', 'Alice', 'David',
+       'Alice', 'Alice', 'Bob', 'David', 'David', 'Bob', 'Charlie',
+       'Alice', 'Eve', 'Alice', 'Alice', 'Charlie', 'Alice', 'Bob', 'Bob',
+       'David', 'Eve', 'Alice', 'Alice', 'Charlie', 'Bob', 'Eve', 'David',
+       'Bob', 'David', 'Charlie', 'Charlie', 'Alice', 'Eve'], dtype='&lt;U7'), 'role': array(['Finance Manager', 'IT Manager', 'HR Manager', 'Sales Manager',
+       'Sales Manager', 'Finance Manager', 'HR Manager',
+       'Marketing Manager', 'HR Manager', 'Finance Manager',
+       'Finance Manager', 'HR Manager', 'Finance Manager', 'HR Manager',
+       'IT Manager', 'HR Manager', 'HR Manager', 'Finance Manager',
+       'Finance Manager', 'Sales Manager', 'Sales Manager', 'IT Manager',
+       'Sales Manager', 'HR Manager', 'Finance Manager', 'Sales Manager',
+       'Sales Manager', 'IT Manager', 'IT Manager', 'HR Manager',
+       'Finance Manager', 'IT Manager', 'Sales Manager',
+       'Finance Manager', 'Finance Manager', 'Sales Manager',
+       'IT Manager', 'Sales Manager', 'Finance Manager',
+       'Marketing Manager', 'Marketing Manager', 'HR Manager',
+       'Sales Manager', 'Sales Manager', 'HR Manager', 'HR Manager',
+       'HR Manager', 'Finance Manager', 'Sales Manager',
+       'Finance Manager'], dtype='&lt;U17'), 'skillset': [[np.str_('HR'), np.str_('Sales')], [np.str_('Finance'), np.str_('Finance')], [np.str_('HR'), np.str_('Sales')], [np.str_('HR'), np.str_('Sales')], [np.str_('Marketing'), np.str_('IT')], [np.str_('IT'), np.str_('IT')], [np.str_('HR'), np.str_('Marketing')], [np.str_('Sales'), np.str_('Finance')], [np.str_('Sales'), np.str_('Finance')], [np.str_('Sales'), np.str_('Marketing')], [np.str_('Finance'), np.str_('HR')], [np.str_('Sales'), np.str_('Sales')], [np.str_('Finance'), np.str_('HR')], [np.str_('HR'), np.str_('Marketing')], [np.str_('HR'), np.str_('HR')], [np.str_('HR'), np.str_('IT')], [np.str_('Marketing'), np.str_('Sales')], [np.str_('Finance'), np.str_('Sales')], [np.str_('Marketing'), np.str_('Finance')], [np.str_('Marketing'), np.str_('HR')], [np.str_('Finance'), np.str_('HR')], [np.str_('Sales'), np.str_('Sales')], [np.str_('Finance'), np.str_('Finance')], [np.str_('Marketing'), np.str_('Marketing')], [np.str_('HR'), np.str_('Finance')], [np.str_('Sales'), np.str_('Marketing')], [np.str_('Marketing'), np.str_('Sales')], [np.str_('Marketing'), np.str_('HR')], [np.str_('Finance'), np.str_('Sales')], [np.str_('Finance'), np.str_('Marketing')], [np.str_('Marketing'), np.str_('Sales')], [np.str_('HR'), np.str_('IT')], [np.str_('Sales'), np.str_('IT')], [np.str_('IT'), np.str_('HR')], [np.str_('IT'), np.str_('IT')], [np.str_('HR'), np.str_('IT')], [np.str_('IT'), np.str_('IT')], [np.str_('Sales'), np.str_('Sales')], [np.str_('Sales'), np.str_('HR')], [np.str_('Marketing'), np.str_('IT')], [np.str_('IT'), np.str_('HR')], [np.str_('IT'), np.str_('Sales')], [np.str_('Marketing'), np.str_('Finance')], [np.str_('IT'), np.str_('Sales')], [np.str_('Finance'), np.str_('Marketing')], [np.str_('Finance'), np.str_('Sales')], [np.str_('Finance'), np.str_('HR')], [np.str_('Finance'), np.str_('IT')], [np.str_('IT'), np.str_('HR')], [np.str_('Sales'), np.str_('IT')]]}</code></pre>
+</div>
 </div>
 </section>
 
