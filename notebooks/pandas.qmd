@@ -156,31 +156,27 @@ employees_data = {
 
 # print(employees_data)
 
-employees_df: DataFrame[EmployeeSchema] = EmployeeSchema.validate(pd.DataFrame(employees_data))
 
-print(employees_df.head(10))
+employees_df = EmployeeSchema.validate(pd.DataFrame(employees_data))
 
+class EmployeeBonus(Employee):
+    BONUS = 'bonus'
+
+class EmployeeBonusSchema(EmployeeSchema):
+    bonus: Series[int] = pa.Field(ge=5, le=10)
+
+FINANCE: SkillsetType = 'Finance'
+
+employees_df[EmployeeBonus.BONUS] = employees_df[Employee.SKILLSET].apply(lambda skillsets: 8 if FINANCE in skillsets else 4)
+
+employees_bonus_df = EmployeeBonusSchema.validate(employees_df, lazy=True)
+
+print(employees_bonus_df.head(10))
 ```
 
 
-## test
+## Data Manipulation
+
 ```{python}
-from typing import Literal, get_args 
-import numpy as np
-
-NameTypeTest = Literal['Alice', 'Bob', 'Charlie', 'David', 'Eve']
-print(np.random.choice(get_args(NameTypeTest), 50))
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
