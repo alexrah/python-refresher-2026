@@ -119,7 +119,7 @@ df: DataFrame[UserSchema] = UserSchema.validate(pd.DataFrame({
 import pandas as pd
 import pandera.pandas as pa
 from pandera.typing import Series, DataFrame
-from typing import Literal, get_args, List, Any
+from typing import Literal, get_args, List 
 import numpy as np
 
 np.random.seed(42)
@@ -156,6 +156,24 @@ employees_data = {
 
 # print(employees_data)
 
+def validate_and_report_errors(df: pd.DataFrame, Schema: type[pa.DataFrameModel]) -> pd.DataFrame:
+    validated_df = pd.DataFrame()
+
+    try:
+        validated_df = Schema.validate(df, lazy=True)
+    except pa.errors.SchemaErrors as e:
+        error_df = pd.DataFrame(e.failure_cases)
+        
+        error_df.sort_index(inplace=True)
+        
+        # Remove unwanted columns
+        columns_to_remove = ['schema_context', 'check_number']
+        error_df = error_df.drop(columns=[col for col in columns_to_remove if col in error_df.columns])
+
+        print(error_df)
+
+    return validated_df
+
 
 employees_df = EmployeeSchema.validate(pd.DataFrame(employees_data))
 
@@ -167,9 +185,12 @@ class EmployeeBonusSchema(EmployeeSchema):
 
 FINANCE: SkillsetType = 'Finance'
 
-employees_df[EmployeeBonus.BONUS] = employees_df[Employee.SKILLSET].apply(lambda skillsets: 8 if FINANCE in skillsets else 4)
+employees_df[EmployeeBonus.BONUS] = employees_df[Employee.SKILLSET].apply(lambda skillsets: 8 if FINANCE in skillsets else 5)
 
-employees_bonus_df = EmployeeBonusSchema.validate(employees_df, lazy=True)
+employees_bonus_df = validate_and_report_errors(employees_df, EmployeeBonusSchema)
+
+print(employees_df.describe())
+
 
 print(employees_bonus_df.head(10))
 ```
@@ -180,3 +201,5 @@ print(employees_bonus_df.head(10))
 ```{python}
 
 ```
+
+
