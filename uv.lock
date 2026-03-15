@@ -10,6 +10,27 @@ resolution-markers = [
     "python_full_version < '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
 
+[manifest]
+members = [
+    "alexrah-pytools",
+    "refresher2026",
+]
+
+[[package]]
+name = "alexrah-pytools"
+version = "0.1.0"
+source = { editable = "alexrah_pytools" }
+
+[package.dev-dependencies]
+dev = [
+    { name = "poethepoet" },
+]
+
+[package.metadata]
+
+[package.metadata.requires-dev]
+dev = [{ name = "poethepoet", specifier = ">=0.41.0" }]
+
 [[package]]
 name = "annotated-types"
 version = "0.7.0"
@@ -959,6 +980,7 @@ name = "refresher2026"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "alexrah-pytools" },
     { name = "ipykernel" },
     { name = "nbclient" },
     { name = "nbformat" },
@@ -977,6 +999,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "alexrah-pytools", editable = "alexrah_pytools" },
     { name = "ipykernel", specifier = ">=7.2.0" },
     { name = "nbclient", specifier = ">=0.10.4" },
     { name = "nbformat", specifier = ">=5.10.4" },
