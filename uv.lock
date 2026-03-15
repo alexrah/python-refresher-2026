@@ -19,17 +19,29 @@ members = [
 [[package]]
 name = "alexrah-pytools"
 version = "0.1.0"
-source = { editable = "alexrah_pytools" }
+source = { editable = "alexrah-pytools" }
+dependencies = [
+    { name = "pandas" },
+    { name = "pandera" },
+]
 
 [package.dev-dependencies]
 dev = [
+    { name = "pandas-stubs" },
     { name = "poethepoet" },
 ]
 
 [package.metadata]
+requires-dist = [
+    { name = "pandas", specifier = ">=3.0.0" },
+    { name = "pandera", specifier = ">=0.29.0" },
+]
 
 [package.metadata.requires-dev]
-dev = [{ name = "poethepoet", specifier = ">=0.41.0" }]
+dev = [
+    { name = "pandas-stubs", specifier = ">=3.0.0.260204" },
+    { name = "poethepoet", specifier = ">=0.41.0" },
+]
 
 [[package]]
 name = "annotated-types"
@@ -999,7 +1011,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "alexrah-pytools", editable = "alexrah_pytools" },
+    { name = "alexrah-pytools", editable = "alexrah-pytools" },
     { name = "ipykernel", specifier = ">=7.2.0" },
     { name = "nbclient", specifier = ">=0.10.4" },
     { name = "nbformat", specifier = ">=5.10.4" },

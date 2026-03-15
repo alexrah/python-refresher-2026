@@ -28,7 +28,7 @@ install_pytools = "uv add --editable alexrah-pytools"
 
 [tool.uv.workspace]
 members = [
-    "alexrah_pytools",
+    "alexrah-pytools",
 ]
 
 [tool.uv.sources]
